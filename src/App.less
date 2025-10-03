@@ -1,0 +1,460 @@
+// 定义颜色变量 - Instagram风格
+@primary-color: #c32aa3; // Instagram主色调
+@secondary-color: #5851db; // Instagram辅助色
+@text-color: #262626;
+@text-secondary-color: #8e8e8e;
+@background-color: #ffffff;
+@border-color: #dbdbdb;
+
+// 应用容器样式
+.app {
+  min-height: 100vh;
+  background-color: #fafafa;
+  display: flex;
+  justify-content: center;
+  padding: 24px;
+}
+
+.app-content {
+  width: 100%;
+  max-width: 900px;
+  background-color: @background-color;
+  border-radius: 8px;
+  padding: 40px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.app-title {
+  text-align: center;
+  margin-bottom: 32px;
+  color: @primary-color;
+}
+
+// 自定义上传框样式
+.custom-dragger {
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 32px 16px;
+  border: 2px dashed @border-color;
+  border-radius: 12px;
+  transition: all 0.3s;
+  &:hover {
+    border-color: @primary-color;
+  }
+}
+
+// 文件列表样式
+.file-list {
+  margin-top: 32px;
+}
+
+.file-list-title {
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid @border-color;
+}
+
+.files-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.file-item {
+  border: 1px solid @border-color;
+  border-radius: 4px;
+  overflow: hidden;
+  transition: all 0.3s;
+  background-color: @background-color;
+  &:hover {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  }
+}
+
+.file-preview-wrapper {
+  position: relative;
+  height: 180px;
+  overflow: hidden;
+}
+
+.file-preview {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  cursor: pointer;
+  transition: transform 0.3s;
+  &:hover {
+    transform: scale(1.05);
+  }
+}
+
+.file-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  transition: opacity 0.3s;
+  &:hover {
+    opacity: 1;
+  }
+}
+
+.remove-button {
+  color: white;
+  background-color: rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  &:hover {
+    background-color: rgba(255, 0, 0, 0.6);
+    color: white;
+  }
+}
+
+.file-info {
+  padding: 8px 12px;
+}
+
+.file-name {
+  font-size: 14px;
+  font-weight: 500;
+  color: @text-color;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.file-size {
+  font-size: 12px;
+  color: @text-secondary-color;
+}
+
+// 操作按钮区域
+.actions {
+  display: flex;
+  justify-content: center;
+  margin-top: 24px;
+}
+
+// 确认对话框列表样式
+.confirmation-list {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.confirmation-item {
+  display: flex;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid @border-color;
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.file-index {
+  width: 30px;
+  color: @text-secondary-color;
+  font-weight: 500;
+}
+
+// 响应式设计
+@media (max-width: 768px) {
+  .app-content {
+    padding: 24px;
+  }
+  
+  .custom-dragger {
+    max-width: 100%;
+    padding: 24px 12px;
+  }
+  
+  .files-grid {
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 12px;
+  }
+  
+  .file-preview-wrapper {
+    height: 120px;
+  }
+}
+
+// 定义颜色变量 - 极简风格
+@primary-color: #000000;
+@secondary-color: #888888;
+@background-color: #ffffff;
+@border-color: #eeeeee;
+@hover-color: #f8f8f8;
+
+// 应用容器样式
+.app {
+  min-height: 100vh;
+  background-color: #fafafa;
+  display: flex;
+  justify-content: center;
+  padding: 24px;
+}
+
+.app-content {
+  width: 100%;
+  max-width: 800px;
+  background-color: #ffffff;
+  padding: 40px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+// 文件容器样式
+.files-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+// 响应式设计
+@media (max-width: 768px) {
+  .app-content {
+    padding: 24px 16px;
+    max-width: 100%;
+  }
+  
+  .files-container {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 12px;
+  }
+}
+
+.app-title {
+  text-align: center;
+  margin-bottom: 32px;
+  font-weight: 500;
+  color: @primary-color;
+}
+
+// 上传框样式 - 极简设计
+.upload-dragger {
+  border: 1px dashed @border-color;
+  border-radius: 8px;
+  padding: 40px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  background-color: #fcfcfc;
+  
+  &:hover {
+    border-color: @primary-color;
+    background-color: @hover-color;
+  }
+  
+  // 自定义上传框内元素样式
+  .ant-upload-drag-icon {
+    font-size: 48px;
+    color: @secondary-color;
+    margin-bottom: 16px;
+  }
+  
+  .ant-upload-text {
+    font-size: 16px;
+    color: @primary-color;
+    margin: 0;
+  }
+  
+  // 隐藏默认的提示文本
+  .ant-upload-hint {
+    display: none;
+  }
+}
+
+// 文件部分样式
+.file-section {
+  margin-top: 32px;
+}
+
+.file-section-title {
+  display: block;
+  font-size: 16px;
+  margin-bottom: 16px;
+  color: @secondary-color;
+}
+
+// 文件网格布局
+.files-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+// 文件项样式
+.file-item {
+  border: 1px solid @border-color;
+  border-radius: 4px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  
+  &:hover {
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  }
+}
+
+.file-preview-wrapper {
+  position: relative;
+  height: 120px;
+  overflow: hidden;
+}
+
+.file-preview {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+  
+  &:hover {
+    transform: scale(1.02);
+  }
+}
+
+
+// 文件信息样式
+.file-info {
+  padding: 8px;
+}
+
+.file-name {
+  font-size: 12px;
+  color: @primary-color;
+  display: block;
+  margin-bottom: 2px;
+}
+
+.file-size {
+  font-size: 11px;
+  color: @secondary-color;
+}
+
+// 确认按钮样式
+.confirm-button {
+  display: block;
+  margin: 0 auto;
+  padding: 6px 24px;
+  background-color: @primary-color;
+  border-color: @primary-color;
+  
+  &:hover {
+    background-color: #333333;
+    border-color: #333333;
+  }
+}
+
+// 确认对话框列表样式
+.confirmation-list {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.confirmation-item {
+  display: flex;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid @border-color;
+  
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.file-index {
+  width: 30px;
+  color: @secondary-color;
+  font-size: 13px;
+}
+
+// 响应式设计
+@media (max-width: 768px) {
+  .app-content {
+    padding: 24px 16px;
+    max-width: 100%;
+  }
+  
+  .app-title {
+    margin-bottom: 24px;
+  }
+  
+  .upload-dragger {
+    padding: 30px 16px;
+  }
+  
+  .files-grid {
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 8px;
+  }
+  
+  .file-preview-wrapper {
+    height: 100px;
+  }
+}
+
+/* 添加识别结果区域的样式 */
+.recognition-results-section {
+  margin-top: 24px;
+}
+
+.section-title {
+  display: block;
+  font-size: 16px;
+  font-weight: 500;
+  margin-bottom: 12px;
+}
+
+.recognition-results-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.recognition-result-item {
+  display: flex;
+  gap: 16px;
+  padding: 12px;
+  border: 1px solid #e8e8e8;
+  border-radius: 4px;
+  background-color: #fff;
+}
+
+.result-image-container {
+  flex-shrink: 0;
+}
+
+.result-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.result-file-name {
+  font-weight: 500;
+}
+
+.result-loading {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.recognized-text {
+  white-space: pre-wrap;
+  word-break: break-word;
+}
