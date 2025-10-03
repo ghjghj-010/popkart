@@ -95,9 +95,9 @@ function App() {
     })
   }
 
-  // 调用豆包多模态API识别图片文字
-  const recognizeImageText = async (file: UploadFile, index: number): Promise<void> => {
-    // 更新当前文件的加载状态
+  // 调用豆包多模态API识别图片文字 - 修改为返回识别结果
+  const recognizeImageText = async (file: UploadFile, index: number): Promise<ImageRecognitionResult> => {
+    // 更新UI状态，显示加载中
     setRecognitionResults(prev => 
       prev.map((item, i) => 
         i === index ? { ...item, loading: true, error: null } : item
@@ -146,26 +146,49 @@ function App() {
       // 处理API响应
       const recognizedText = response.data.choices?.[0]?.message?.content || '未能识别到文字'
       
-      // 更新识别结果
+      // 创建识别结果对象
+      const result: ImageRecognitionResult = {
+        file,
+        recognizedText,
+        loading: false,
+        error: null
+      }
+
+      // 更新UI状态
       setRecognitionResults(prev => 
         prev.map((item, i) => 
-          i === index ? { ...item, recognizedText, loading: false } : item
+          i === index ? result : item
         )
       )
+
+      return result
     } catch (error) {
       console.error('识别图片文字失败:', error)
+      
+      // 创建错误结果对象
+      const errorResult: ImageRecognitionResult = {
+        file,
+        recognizedText: '',
+        loading: false,
+        error: '识别失败，请重试'
+      }
+
+      // 更新UI状态
       setRecognitionResults(prev => 
         prev.map((item, i) => 
-          i === index ? { ...item, loading: false, error: '识别失败，请重试' } : item
+          i === index ? errorResult : item
         )
       )
+
+      return errorResult
     }
   }
 
-  // 生成并下载Excel文件
+  // 生成并下载Excel文件 - 修改为接收识别结果参数
   const generateAndDownloadExcel = (results: ImageRecognitionResult[]) => {
     try {
-      console.log('recognitionResults', results)
+      console.log('使用最新识别结果生成Excel:', results)
+      
       // 准备Excel数据
       const excelData = results.map(result => ({
         '文件名': result.file.name,
@@ -183,6 +206,7 @@ function App() {
       
       message.success('Excel文件已下载')
     } catch (error) {
+      console.error('生成Excel文件失败:', error)
       message.error('生成Excel文件失败，请重试')
     }
   }
@@ -207,14 +231,14 @@ function App() {
 
     // 并行识别所有图片文字
     const recognitionPromises = files.map((file, index) => recognizeImageText(file, index))
+    // 直接从Promise.all获取最新的识别结果
     const results = await Promise.all(recognitionPromises)
 
     message.destroy()
     message.success('图片文字识别完成')
     
-    console.log('recognitionResults', recognitionResults)
-    // 立即生成并下载Excel文件
-    generateAndDownloadExcel(initialResults) // TODO:这里的结果不对, 需要去Promise.all把 results抛出来
+    // 将Promise.all返回的最新结果直接传递给generateAndDownloadExcel
+    generateAndDownloadExcel(results)
   }
 
   // 自定义上传列表项
