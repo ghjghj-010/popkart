@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { Upload, Modal, Button, message, Typography, Spin } from 'antd'
 import type { UploadProps, UploadFile } from 'antd'
 import { PlusOutlined, DeleteOutlined, DownloadOutlined } from '@ant-design/icons'
