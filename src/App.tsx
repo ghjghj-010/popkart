@@ -36,6 +36,8 @@ function App() {
   const [previewOpen, setPreviewOpen] = useState<boolean>(false)
   // 识别结果列表
   const [recognitionResults, setRecognitionResults] = useState<ImageRecognitionResult[]>([])
+  // 识别任务是否正在进行中
+  const [isRecognizing, setIsRecognizing] = useState<boolean>(false)
 
   // 处理文件上传前的校验
   const beforeUpload = (file: File) => {
@@ -375,6 +377,13 @@ function App() {
       return
     }
 
+    // 如果已经在识别中，直接返回
+    if (isRecognizing) {
+      return
+    }
+
+    // 设置识别状态为进行中
+    setIsRecognizing(true)
     message.loading('正在识别图片文字，请稍候...')
     
     // 初始化识别结果状态
@@ -404,6 +413,9 @@ function App() {
       message.destroy()
       message.error('识别过程中出现错误')
       console.error('识别错误:', error)
+    } finally {
+      // 无论成功还是失败，都要清除识别状态
+      setIsRecognizing(false)
     }
   }
 
@@ -492,8 +504,13 @@ function App() {
             </div>
             
             {/* 确认按钮 */}
-            <Button type="primary" onClick={handleConfirmUpload} icon={<DownloadOutlined />}>
-              确认上传并识别文字（自动生成Excel）
+            <Button 
+              type="primary" 
+              onClick={handleConfirmUpload} 
+              icon={<DownloadOutlined />}
+              loading={isRecognizing}
+            >
+              {isRecognizing ? '正在识别中...' : '确认上传并识别文字（自动生成Excel）'}
             </Button>
           </div>
         )}
