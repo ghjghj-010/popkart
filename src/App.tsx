@@ -135,7 +135,7 @@ function App() {
               },
               {
                 type: 'text',
-                text: '请识别图片中每个选手的名次和名称，严格按照以下格式返回：名次. 选手名称。例如：1. 张三\n2. 李四\n...\n对于未完成比赛的选手，请标记为X. 选手名称。例如：X. 王五'
+                text: '请仔细识别图片中每个选手的名次和名称。\n\n要求：\n1. 严格按照以下格式返回：名次. 选手名称\n2. 只保留选手名称中的中文和英文字符，忽略所有标点符号、数字、空格等特殊字符\n3. 对于未完成比赛的选手，标记为X. 选手名称\n4. 确保选手名称准确识别，避免因格式问题导致识别错误\n\n示例：\n1. 张三\n2. 李四\n3. John\nX. 王五\n\n请按此格式返回识别结果：'
               }
             ]
           }
@@ -190,6 +190,26 @@ function App() {
 
       return errorResult
     }
+  }
+
+  // 标准化选手名称，只保留中文和英文字符
+  const normalizePlayerName = (name: string): string => {
+    // 使用正则表达式只保留中文、英文字母和数字
+    return name.replace(/[^\u4e00-\u9fa5a-zA-Z0-9]/g, '').trim()
+  }
+
+  // 根据标准化名称匹配选手
+  const findMatchingPlayer = (targetName: string, existingPlayers: Set<string>): string | null => {
+    const normalizedTarget = normalizePlayerName(targetName)
+    
+    for (const existingPlayer of existingPlayers) {
+      const normalizedExisting = normalizePlayerName(existingPlayer)
+      if (normalizedTarget === normalizedExisting) {
+        return existingPlayer
+      }
+    }
+    
+    return null
   }
 
   // 根据名次获取分数
@@ -302,14 +322,25 @@ function App() {
         // 解析识别结果
         const playerScores = parseRecognitionResult(result.recognizedText, imageName)
         
-        // 更新选手列表和分数映射
+        // 更新选手列表和分数映射，使用标准化名称匹配
         playerScores.forEach((score, playerName) => {
-          allPlayers.add(playerName)
+          // 查找是否已有相同的选手（基于标准化名称）
+          const matchingPlayer = findMatchingPlayer(playerName, allPlayers)
+          const finalPlayerName = matchingPlayer || playerName
           
-          if (!playerScoresMap.has(playerName)) {
-            playerScoresMap.set(playerName, new Map<string, number>())
+          // 如果没有匹配到现有选手，添加新选手
+          if (!matchingPlayer) {
+            allPlayers.add(playerName)
+            console.log(`添加新选手: ${playerName} (标准化后: ${normalizePlayerName(playerName)})`)
+          } else {
+            console.log(`匹配到现有选手: ${playerName} -> ${matchingPlayer} (标准化后: ${normalizePlayerName(playerName)})`)
           }
-          playerScoresMap.get(playerName)?.set(imageName, score)
+          
+          // 使用最终确定的选手名称
+          if (!playerScoresMap.has(finalPlayerName)) {
+            playerScoresMap.set(finalPlayerName, new Map<string, number>())
+          }
+          playerScoresMap.get(finalPlayerName)?.set(imageName, score)
         })
       })
       
@@ -352,6 +383,9 @@ function App() {
         
         return playerData
       })
+
+      // 按选手名称排序，确保Excel输出的一致性
+      excelData.sort((a, b) => a.playerName.localeCompare(b.playerName, 'zh-CN'))
 
       console.log('生成的Excel数据:', excelData)
       // 创建工作簿
