@@ -275,7 +275,7 @@ function App() {
       if (tableMatch) {
         const playerName = tableMatch[1].trim()
         const scoreOrRank = tableMatch[2]
-        const score = scoreOrRank.toUpperCase() === 'X' ? -5 : parseInt(scoreOrRank)
+        const score = getScoreByRank(scoreOrRank)
         console.log(`匹配到格式3: 选手${playerName}, 分数/名次${scoreOrRank}, 最终分数${score}`)
         playerScores.set(playerName, score)
         continue
@@ -376,7 +376,8 @@ function App() {
         
         // 为每个图片设置对应的分数，如果没有则设为-5（未完成比赛）
         sortedImages.forEach(imageName => {
-          const score = playerScoresMap.get(playerName)?.get(imageName) || -5
+          // 使用空值合并运算符代替逻辑或，确保0分不会被替换为-5
+          const score = playerScoresMap.get(playerName)?.get(imageName) ?? -5
           playerData[imageName] = score
         })
         
