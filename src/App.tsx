@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Upload, Modal, Button, message, Typography, Spin } from 'antd'
+import { Upload, Button, message, Typography, Spin, Image } from 'antd'
 import type { UploadProps, UploadFile } from 'antd'
 import { PlusOutlined, DeleteOutlined, DownloadOutlined } from '@ant-design/icons'
 import axios from 'axios'
@@ -30,14 +30,12 @@ interface PlayerScore {
 function App() {
   // 存储上传的文件列表
   const [files, setFiles] = useState<UploadFile[]>([])
-  // 预览图片的索引
-  const [previewIndex, setPreviewIndex] = useState<number>(-1)
-  // 是否显示预览
-  const [previewOpen, setPreviewOpen] = useState<boolean>(false)
   // 识别结果列表
   const [recognitionResults, setRecognitionResults] = useState<ImageRecognitionResult[]>([])
   // 识别任务是否正在进行中
   const [isRecognizing, setIsRecognizing] = useState<boolean>(false)
+  // 移除预览相关的状态，因为Image组件会处理预览
+  const [previewOpen, setPreviewOpen] = useState<boolean>(false)
 
   // 处理文件上传前的校验
   const beforeUpload = (file: File) => {
@@ -64,12 +62,12 @@ function App() {
   }
 
   // 处理预览图片
-  const handlePreview = (index: number) => {
-    setPreviewIndex(index)
-    setPreviewOpen(true)
-  }
+  // const handlePreview = (index: number) => {
+  //   setPreviewIndex(index)
+  //   setPreviewOpen(true)
+  // }
 
-  // 处理移除文件
+  // 处理移除文件 - 保持原有的实现
   const handleRemove = (file: UploadFile) => {
     // 释放预览URL
     if (file.thumbUrl) {
@@ -79,6 +77,7 @@ function App() {
     setFiles(prevFiles => prevFiles.filter(item => item.uid !== file.uid))
     return true
   }
+
 
   // 格式化文件大小
   const formatFileSize = (bytes: number): string => {
@@ -458,17 +457,21 @@ function App() {
     return (
       <div className="file-item" key={item.uid}>
         <div className="file-preview-wrapper">
-          <img 
+          <Image
             src={item.thumbUrl} 
             alt={item.name} 
-            className="file-preview"
-            onClick={() => handlePreview(index)}
+            preview={{ 
+                visible: previewOpen,
+                onVisibleChange: (visible) => setPreviewOpen(visible),
+            }}
+            style={{ objectFit: 'cover', cursor: 'pointer' }}
           />
           <Button 
             type="text" 
             size="small" 
             icon={<DeleteOutlined />}
             onClick={() => handleRemove(item)}
+            style={{ position: 'absolute', top: 0, right: 0, backgroundColor: 'rgba(255, 255, 255, 0.8)' }}
           />
         </div>
         <div className="file-info">
@@ -548,23 +551,7 @@ function App() {
             </Button>
           </div>
         )}
-
-        {/* 图片预览模态框 */}
-        <Modal
-          open={previewOpen}
-          title={files[previewIndex]?.name}
-          footer={null}
-          onCancel={() => setPreviewOpen(false)}
-          centered
-          width={800}
-        >
-          <img 
-            alt="预览图片" 
-            style={{ width: '100%' }}
-            src={files[previewIndex]?.thumbUrl}
-          />
-        </Modal>
-
+        
         {/* 识别结果显示区域 */}
         {recognitionResults.length > 0 && (
           <div className="recognition-results-section">
