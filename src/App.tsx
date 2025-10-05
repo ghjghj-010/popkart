@@ -475,7 +475,7 @@ function App() {
   return (
     <div className="app">
       <div className="app-content">
-        <Title level={2} className="app-title">图片上传</Title>
+        <Title level={2} className="app-title">上传比赛图片识别名次</Title>
         
         {/* 拖拽上传区域 */}
         <Upload.Dragger {...uploadProps} className="upload-dragger">
