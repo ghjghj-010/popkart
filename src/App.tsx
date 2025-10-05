@@ -9,7 +9,7 @@ import './App.less'
 const { Title, Text } = Typography
 
 // 豆包多模态API配置（请替换为您实际的API密钥和配置）
-const DOUBAO_API_KEY = 'ab229391-bea8-475a-8927-4d1423ebfdf0'
+const DOUBAO_API_KEY = 'c2fc27bc-cf1d-4f0a-bbb3-ce3916a497e0'
 // const DOUBAO_API_SECRET = 'YOUR_DOUBAO_API_SECRET'
 const DOUBAO_API_URL = 'https://ark.cn-beijing.volces.com/api/v3/chat/completions'
 
@@ -120,7 +120,7 @@ function App() {
 
       // 构建请求数据 - 优化提示词以获得更结构化的返回
       const requestData = {
-        model: 'doubao-seed-1-6-vision-250815', // 豆包多模态模型
+        model: 'doubao-seed-1-6-flash-250828', // 豆包多模态模型
         messages: [
           {
             role: 'user',
